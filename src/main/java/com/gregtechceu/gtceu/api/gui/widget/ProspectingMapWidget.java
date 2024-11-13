@@ -10,6 +10,7 @@ import com.gregtechceu.gtceu.integration.map.WaypointManager;
 import com.gregtechceu.gtceu.integration.map.cache.client.GTClientCache;
 import com.gregtechceu.gtceu.integration.map.cache.server.ServerCache;
 import com.gregtechceu.gtceu.integration.map.layer.builtin.OreRenderLayer;
+
 import com.lowdragmc.lowdraglib.gui.editor.ColorPattern;
 import com.lowdragmc.lowdraglib.gui.texture.IGuiTexture;
 import com.lowdragmc.lowdraglib.gui.texture.TextTexture;
@@ -264,7 +265,8 @@ public class ProspectingMapWidget extends WidgetGroup implements SearchComponent
                 clickedItem.color,
                 gui.entityPlayer.level().dimension(),
                 clickedItem.position.getX(), clickedItem.position.getY(), clickedItem.position.getZ());
-        gui.entityPlayer.displayClientMessage(Component.translatable("behavior.prospector.added_waypoint", clickedItem.name), true);
+        gui.entityPlayer.displayClientMessage(
+                Component.translatable("behavior.prospector.added_waypoint", clickedItem.name), true);
         playButtonClickSound();
         return true;
     }
@@ -285,7 +287,8 @@ public class ProspectingMapWidget extends WidgetGroup implements SearchComponent
         int xPos = ((gui.entityPlayer.chunkPosition().x + xDiff) << 4) + offsetX;
         int zPos = ((gui.entityPlayer.chunkPosition().z + zDiff) << 4) + offsetZ;
 
-        var blockPos = new BlockPos(xPos, gui.entityPlayer.level().getHeight(Heightmap.Types.WORLD_SURFACE, xPos, zPos), zPos);
+        var blockPos = new BlockPos(xPos, gui.entityPlayer.level().getHeight(Heightmap.Types.WORLD_SURFACE, xPos, zPos),
+                zPos);
         if (cX < 0 || cZ < 0 || cX >= chunkRadius * 2 - 1 || cZ >= chunkRadius * 2 - 1) {
             return null;
         }
@@ -311,7 +314,8 @@ public class ProspectingMapWidget extends WidgetGroup implements SearchComponent
         // If all else fails see if there's a nearby vein and use the vein's name
         var vein = GTClientCache.instance.getNearbyVeins(gui.entityPlayer.level().dimension(), blockPos, 32);
         if (!vein.isEmpty()) {
-            vein.sort((o1, o2) -> (int) (o1.center().distToCenterSqr(xPos, o1.center().getY(), zPos) - o2.center().distToCenterSqr(xPos, o2.center().getY(), zPos)));
+            vein.sort((o1, o2) -> (int) (o1.center().distToCenterSqr(xPos, o1.center().getY(), zPos) -
+                    o2.center().distToCenterSqr(xPos, o2.center().getY(), zPos)));
             var name = OreRenderLayer.getName(vein.get(0)).getString();
             var materials = vein.get(0).definition().veinGenerator().getAllMaterials();
             var mostCommonItem = materials.get(materials.size() - 1);
@@ -356,6 +360,5 @@ public class ProspectingMapWidget extends WidgetGroup implements SearchComponent
         }
     }
 
-    private record WaypointItem(BlockPos position, String name, int color) {
-    }
+    private record WaypointItem(BlockPos position, String name, int color) {}
 }
